@@ -1,5 +1,7 @@
 const express = require('express');
-const { handler,getAnalytics} = require('../controllers/url');
+const { handler,
+    getAnalytics} 
+    =  require('../controllers/url');
 const router = express.Router();
 
 router.post('/',handler);

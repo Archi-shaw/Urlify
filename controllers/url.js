@@ -24,7 +24,7 @@ async function handler(req, res) {
   return res.render("home", {
     id: generatedId,
     urls: allUrls,     
-  });
+});
 }
 
 
