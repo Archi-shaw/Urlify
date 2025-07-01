@@ -4,7 +4,7 @@ const port = 8002;
 const connectDB = require('./connect');
 const URL = require('./models/url');
 const cookieParser = require("cookie-parser");
-const { restrictToLoginUserOnly} = require('./middleware/auth');
+const { restrictToLoginUserOnly , checkauth} = require('./middleware/auth');
 
 const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticroute');
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/url',restrictToLoginUserOnly, urlRoute);
-app.use('/', staticRoute);
+app.use('/', checkauth, staticRoute);
 app.use('/user',userRouter);
 
 
