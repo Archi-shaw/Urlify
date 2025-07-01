@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL List</title>
+</head>
+<body>
+  <h1>URL Shortener</h1>
+
+  <% if (typeof id !== 'undefined') { %>
+    <p>Generated URL: http://localhost:8002/url/<%= id %></p>
+  <% } %>
+
+  <div>
+    <form method="POST" action="/url">
+      <label>Enter your Original URL</label>
+      <input type="text" name="url" placeholder="https://example.com" required />
+      <button type="submit">Generate</button>
+    </form>
+  </div>
+
+  <% if (Array.isArray(urls) && urls.length > 0) { %>
+    <h2>All URLs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>SL NO.</th>
+          <th>Short ID</th>
+          <th>Redirect URL</th>
+          <th>Clicks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% urls.forEach((url, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= url.shortid %></td>
+            <td><a href="<%= url.redirecturl %>" target="_blank"><%= url.redirecturl %></a></td>
+            <td><%= url.viewHistory.length %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p>No URLs have been shortened yet.</p>
+  <% } %>
+</body>
+</html>
+
