@@ -3,7 +3,8 @@ const app = express();
 const port = 8002;
 const connectDB = require('./connect');
 const URL = require('./models/url');
-
+const cookieParser = require("cookie-parser");
+const { restrictToLoginUserOnly} = require('./middleware/auth');
 
 const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticroute');
@@ -18,8 +19,9 @@ connectDB('mongodb://127.0.0.1:27017/urlshortner')
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
-app.use('/url', urlRoute);
+app.use('/url',restrictToLoginUserOnly, urlRoute);
 app.use('/', staticRoute);
 app.use('/user',userRouter);
 
