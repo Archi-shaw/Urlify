@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
-const port = 8002;
-const connectDB = require('./connect');
+const dotenv = require('dotenv');
+dotenv.config(); 
+const port = process.env.PORT;
 const URL = require('./models/url');
 const cookieParser = require("cookie-parser");
 const { checkForAuthentication,restrictTo} = require('./middleware/auth');
@@ -10,10 +11,12 @@ const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticroute');
 const userRouter = require('./routes/user');
 
+const mongoose = require('mongoose');
 
-connectDB('mongodb://127.0.0.1:27017/urlshortner')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Error connecting to MongoDB:', err));
+
+mongoose.connect(process.env.MONGODB_URL)
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 
 app.set('view engine', 'ejs');
@@ -21,6 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(checkForAuthentication);
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 app.use('/url',restrictTo(["NORMAL"]), urlRoute);
 app.use('/', staticRoute);
