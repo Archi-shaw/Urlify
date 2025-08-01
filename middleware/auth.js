@@ -13,10 +13,6 @@ function checkForAuthentication(req, res, next) {
   next();
 }
 
-function restrictTo(roles = []) {
-  return (req, res, next) => {
-    next();
-  };
-}
 
-module.exports = { checkForAuthentication, restrictTo };
+
+module.exports = { checkForAuthentication};

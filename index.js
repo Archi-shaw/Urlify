@@ -27,7 +27,7 @@ app.use(checkForAuthentication);
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 
-app.use('/url',restrictTo(["NORMAL"]), urlRoute);
+app.use('/url', urlRoute);
 app.use('/', staticRoute);
 app.use('/user',userRouter);
 
