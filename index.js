@@ -3,10 +3,11 @@ const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
 const port = process.env.PORT;
-
 const mongoose = require('mongoose');
 const URL = require('./models/url');
 const userRouter = require('./routes/user'); 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log('MongoDB Connected'))
@@ -18,8 +19,6 @@ const staticRoute = require('./routes/staticroute');
 app.set('view engine', 'ejs');
 app.use('/user', userRouter); 
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
