@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: custom overrides (you usually don't need much here) */
+
+#root {
+  @apply max-w-5xl mx-auto p-8 text-center;
+}
+
+.card {
+  @apply p-8 shadow rounded-xl bg-white;
+}
+
+.read-the-docs {
+  @apply text-gray-500;
+}
+
+/* Example for spinning logo animation */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.logo {
+  @apply h-24 p-6 transition;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #6366f1aa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo-spin {
+    animation: logo-spin infinite 20s linear;
+  }
+}
