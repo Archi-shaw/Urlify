@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const allowedOrigins = [
   'http://localhost:5173', 
+  "https://urlify-backened.onrender.com",
 ];
 
 app.use(cors({
