@@ -9,24 +9,28 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const res = await fetch("/user/login", {
+   try {
+      const res = await fetch("http://localhost:8000/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        console.log("Login successful");
-        navigate("/"); // redirect after login
+        console.log("Login successful", data);
+        localStorage.setItem("token", data.token); 
+        navigate("/"); 
       } else {
-        console.error("Login failed");
+        setError(data.message || "LOgin failed");
       }
-    } catch (error) {
-      console.error("Error during login:", error);
+    } catch (err) {
+      console.error("Error during login:", err);
+      setError("Something went wrong. Please try again.");
     }
   };
+
 
   return (
     <div className="bg-gradient-to-br from-gray-100 to-indigo-100 min-h-screen">

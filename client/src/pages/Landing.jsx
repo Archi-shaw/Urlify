@@ -7,20 +7,29 @@ export default function UrlShortener() {
   const [urls, setUrls] = useState([]);
   const [error, setError] = useState("");
 
+  const API_BASE = "http://localhost:8000"; 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const res = await fetch("/url", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
+    try {
+      const res = await fetch(`${API_BASE}/url`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.id) {
-      setId(data.id);
-      setUrls((prev) => [...prev, data]);
+      if (res.ok) {
+        setId(data.shortid); 
+        setUrls((prev) => [...prev, data]);
+      } else {
+        setError(data.message || "Failed to shorten URL");
+      }
+    } catch (err) {
+      setError("Server error. Please try again.");
     }
 
     setUrl("");
@@ -29,16 +38,18 @@ export default function UrlShortener() {
   const handleDelete = async (shortid) => {
     if (!window.confirm("Are you sure you want to delete this URL?")) return;
 
-    await fetch(`/url/${shortid}`, { method: "DELETE" });
-    setUrls((prev) => prev.filter((u) => u.shortid !== shortid));
+    try {
+      await fetch(`${API_BASE}/url/${shortid}`, { method: "DELETE" });
+      setUrls((prev) => prev.filter((u) => u.shortid !== shortid));
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
   };
 
   return (
     <div className="bg-gradient-to-br from-gray-100 to-indigo-100 min-h-screen">
-      {/* Navbar */}
       <Navbar />
 
-      {/* Page Content */}
       <div className="flex items-center justify-center py-12">
         <div className="w-full max-w-3xl bg-white shadow-xl rounded-2xl p-10">
           <h1 className="text-4xl font-bold text-center text-indigo-700 mb-8">
@@ -49,12 +60,12 @@ export default function UrlShortener() {
             <div className="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded mb-6 text-center">
               <p className="font-medium">Generated URL:</p>
               <a
-                href={`http://localhost:8000/url/${id}`}
+                href={`${API_BASE}/url/${id}`}
                 target="_blank"
                 rel="noreferrer"
                 className="underline text-blue-600"
               >
-                {id}
+                {`${API_BASE}/url/${id}`}
               </a>
             </div>
           )}
@@ -85,6 +96,10 @@ export default function UrlShortener() {
               </button>
             </div>
           </form>
+
+          {error && (
+            <p className="text-red-500 font-medium text-center mb-4">{error}</p>
+          )}
 
           {urls.length > 0 ? (
             <>
@@ -149,4 +164,3 @@ export default function UrlShortener() {
     </div>
   );
 }
-
