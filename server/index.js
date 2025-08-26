@@ -2,24 +2,33 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 dotenv.config();
+const cors = require('cors');
+const connectDb = require('./config/db');
 const port = process.env.PORT;
-
-const mongoose = require('mongoose');
 const URL = require('./models/url');
 const userRouter = require('./routes/user'); 
-
-mongoose.connect(process.env.MONGODB_URL)
-  .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.error('MongoDB connection error:', err));
-
+connectDb();
 const urlRoute = require('./routes/url');
 const staticRoute = require('./routes/staticroute');
-
-app.set('view engine', 'ejs');
-app.use('/user', userRouter); 
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+const allowedOrigins = [
+  'http://localhost:5173', 
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS: " + origin));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+app.use('/user', userRouter); 
+
 
 const methodOverride = require('method-override');
 app.use(methodOverride('_method'));

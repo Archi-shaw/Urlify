@@ -19,7 +19,7 @@ const Login = () => {
 
       if (res.ok) {
         console.log("Login successful");
-        navigate("/dashboard"); // redirect after login
+        navigate("/"); // redirect after login
       } else {
         console.error("Login failed");
       }
