@@ -3,12 +3,10 @@
 
 @import "tailwindcss";
 
-/* Root font variable */
 :root {
   --font-display: "Urbanist", sans-serif;
 }
 
-/* Apply global styles */
 html {
   font-family: var(--font-display);
 }
@@ -18,7 +16,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
@@ -32,9 +29,7 @@ body {
   background: transparent;
 }
 
-/* Extra Tailwind utilities */
 @layer utilities {
-  /* Animate text with a shine effect */
   @keyframes text-shine {
     0% {
       background-position: 0% 50%;
